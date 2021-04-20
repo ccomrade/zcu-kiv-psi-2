@@ -1,6 +1,6 @@
 # zcu-kiv-psi-2
 
-This is the second KIV/PSI project. It's a very simple HTTP server that demonstrates one thread per client model.
+This is the second KIV/PSI project. A very simple HTTP server that demonstrates one thread per client model.
 
 ## Implementation
 
