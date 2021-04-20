@@ -5,7 +5,7 @@
 
 #include "log.h"
 
-static size_t error_code_to_string(char *buffer, size_t buffer_size, int code)
+static void error_code_to_string(char *buffer, size_t buffer_size, int code)
 {
 	char description_buffer[100];
 	const char *description = NULL;
@@ -19,54 +19,20 @@ static size_t error_code_to_string(char *buffer, size_t buffer_size, int code)
 	}
 #endif
 
-	int status;
-
 	if (description)
 	{
-		status = snprintf(buffer, buffer_size, ": Error code %d (%s)", code, description);
+		snprintf(buffer, buffer_size, ": Error code %d (%s)", code, description);
 	}
 	else
 	{
-		status = snprintf(buffer, buffer_size, ": Error code %d", code);
+		snprintf(buffer, buffer_size, ": Error code %d", code);
 	}
-
-	size_t length = 0;
-
-	if (status > 0)
-	{
-		length = status;
-
-		if (length >= buffer_size)
-		{
-			// truncated message
-			length = buffer_size - 1;
-		}
-	}
-
-	return length;
 }
 
-static size_t format_message(char *buffer, size_t buffer_size, const char *format, va_list args)
+static void write_message(char *message)
 {
-	size_t length = 0;
+	const size_t length = strlen(message);
 
-	int status = vsnprintf(buffer, buffer_size, format, args);
-	if (status > 0)
-	{
-		length = status;
-
-		if (length >= buffer_size)
-		{
-			// truncated message
-			length = buffer_size - 1;
-		}
-	}
-
-	return length;
-}
-
-static void write_message(char *message, size_t length)
-{
 	// temporary replace terminating null character with newline
 	message[length] = '\n';
 
@@ -86,10 +52,9 @@ void log_info(const char *format, ...)
 void log_info_v(const char *format, va_list args)
 {
 	char buffer[1024];
+	vsnprintf(buffer, sizeof buffer, format, args);
 
-	size_t length = format_message(buffer, sizeof buffer, format, args);
-
-	write_message(buffer, length);
+	write_message(buffer);
 }
 
 void log_error(const char *format, ...)
@@ -103,10 +68,9 @@ void log_error(const char *format, ...)
 void log_error_v(const char *format, va_list args)
 {
 	char buffer[1024];
+	vsnprintf(buffer, sizeof buffer, format, args);
 
-	size_t length = format_message(buffer, sizeof buffer, format, args);
-
-	write_message(buffer, length);
+	write_message(buffer);
 }
 
 void log_error_code(int code, const char *format, ...)
@@ -122,11 +86,11 @@ void log_error_code_v(int code, const char *format, va_list args)
 	const size_t description_buffer_size = 128;
 
 	char buffer[1024];
+	vsnprintf(buffer, (sizeof buffer) - description_buffer_size, format, args);
 
-	size_t length = format_message(buffer, (sizeof buffer) - description_buffer_size, format, args);
-	length += error_code_to_string(buffer + length, description_buffer_size, code);
+	error_code_to_string(buffer + strlen(buffer), description_buffer_size, code);
 
-	write_message(buffer, length);
+	write_message(buffer);
 }
 
 void log_perror(const char *format, ...)

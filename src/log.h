@@ -3,6 +3,8 @@
 
 #include <stdarg.h>
 
+// thread-safe logging
+
 void log_info(const char *format, ...);
 void log_info_v(const char *format, va_list args);
 

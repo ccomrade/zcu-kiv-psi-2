@@ -131,12 +131,7 @@ int protocol_process_client_request(int client_socket_fd, const char *client_nam
 		return -1;
 	}
 
-	if (send_default_page(client_socket_fd, uri, client_name) < 0)
-	{
-		return -1;
-	}
-
 	log_info("%s %s %s", client_name, method, uri);
 
-	return 0;
+	return send_default_page(client_socket_fd, uri, client_name);
 }

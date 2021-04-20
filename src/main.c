@@ -104,7 +104,7 @@ static int create_server_socket()
 	return socket_fd;
 }
 
-static int run(int server_socket_fd)
+static int run_server(int server_socket_fd)
 {
 	log_info("Listening on port %d", SERVER_LISTEN_PORT);
 
@@ -129,19 +129,19 @@ static int run(int server_socket_fd)
 
 int main()
 {
-	int server_socket_fd = create_server_socket();
-	if (server_socket_fd < 0)
+	int socket_fd = create_server_socket();
+	if (socket_fd < 0)
 	{
 		return 1;
 	}
 
-	if (run(server_socket_fd) < 0)
+	if (run_server(socket_fd) < 0)
 	{
-		close(server_socket_fd);
+		close(socket_fd);
 		return 1;
 	}
 
-	close(server_socket_fd);
+	close(socket_fd);
 
 	return 0;
 }
