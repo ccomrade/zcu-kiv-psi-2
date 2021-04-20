@@ -1,0 +1,5 @@
+# build directory
+build/
+
+# the resulting executable
+http_server
