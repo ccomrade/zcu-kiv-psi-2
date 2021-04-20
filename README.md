@@ -30,13 +30,13 @@ The server can be started as follows:
 ./http_server
 ```
 
-To connect to the running server, either open <http://localhost:12345> in a web browser or use the following command:
+To connect to it, open <http://localhost:12345> in a web browser or use the following command:
 
 ```
 curl http://localhost:12345
 ```
 
-Here is the hard-coded web page that the server uses to respond to valid GET requests:
+Here is the hard-coded web page used to respond to valid GET requests:
 
 ```html
 <!DOCTYPE html>
